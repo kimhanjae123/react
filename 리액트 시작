@@ -1,0 +1,9 @@
+<ReactApp생성>
+npm create vite@latest
+>프로젝트명
+>React선택
+>JavaScript선택
+
+2.cd 프로젝트 명
+3.npm install (node_module생성)
+4.npm run dev (프로젝트 실행)

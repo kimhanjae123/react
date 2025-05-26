@@ -1,0 +1,37 @@
+<리액트란?>
+프론트엔드 javascript프레임워크
+Facebook에서 만든 Javascript라이브러리
+UI 구성 요소를 빌드하기 위한 도구
+
+<Virtual DOM(Document Object Model) 생성>
+브라우저의 DOM을 직접 조작하는 대신에 React는 브라우저DOM을 변경하기 전에 필요한 모든 조작을 수행하는 
+가상 DOM을 메모리에 생성
+
+<변경된 사항만 다시 그린다>
+
+<리액트는 ES6사용>
+ES6는 ECMAScript 6의 약자(ECMAScript 2015라고도 함)
+
+<Babel ?>
+-자바스크립트 컴파일러
+-최신 버전의 자바스크립트 문법은 브라우저가 이해하지 못하기 때문에 babel이 브라우저가 이해할 수 있는 문법으로 변환
+-JSX 지원
+
+<React의 목표>
+여러가지 방법으로 웹 페이지에서 HTML을 렌더링하는 것
+reactDOM.render() : HTML을 웹 페이지에 렌더링 
+-지정된 HTML요소 내부에 지정된 HTML 코드를 표시
+
+<JSX란?>
+JSX를 Javascript XML의 약자
+JSX를 사용하면 React에서 HTML을 사용할 수 있음
+JSX를 사용하면 React에서 HTML을 더 쉽게 작성하고 추가할 수 있음
+JSX는 ES6을 기반으로 하는 Javascript언어의 확장이며 런타임시 일반 Javascript로 변환
+
+JSX없이 : 
+const myelement = React.createElment('h1',{},'I do not use JSX!');
+ReactDOM.render(myelement,document.getElementById('root'));
+
+JSX없이 : 
+const myelement = <h1>I do not use JSX!</h1>;
+ReactDOM.render(myelement,document.getElementById('root'));
