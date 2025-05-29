@@ -1,12 +1,28 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {Table} from 'reactstrap';
+import { url } from './config';
 const AllAccountInfo=()=>{
-    const accs = [
-            {id:'10001',name:'홍길동',balance:100000,type:'일반계좌',grade:''},
-            {id:'10002',name:'송길동',balance:200000,type:'특수계좌',grade:'VIP'},
-            {id:'10003',name:'하길동',balance:300000,type:'일반계좌',grade:''},
-            {id:'10004',name:'구길동',balance:400000,type:'특수계좌',grade:'Gold'},
-            {id:'10005',name:'차길동',balance:500000,type:'특수계좌',grade:'Silver'},
-        ];
+    // const accs = [
+    //         {id:'10001',name:'홍길동',balance:100000,type:'일반계좌',grade:''},
+    //         {id:'10002',name:'송길동',balance:200000,type:'특수계좌',grade:'VIP'},
+    //         {id:'10003',name:'하길동',balance:300000,type:'일반계좌',grade:''},
+    //         {id:'10004',name:'구길동',balance:400000,type:'특수계좌',grade:'Gold'},
+    //         {id:'10005',name:'차길동',balance:500000,type:'특수계좌',grade:'Silver'},
+    //     ];
+    const [accs, setAccs] = useState([])
+    useEffect(()=>{
+        axios.post(`${url}/allAccountInfo`)
+        .then(res=>{
+            console.log(res.data);
+            setAccs(res.data);
+            console.log("accs"+accs);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },[])
+
         return(
             <div className="route">
                 <h4>전체 계좌 조회</h4>

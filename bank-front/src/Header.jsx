@@ -24,7 +24,7 @@ const Header = () => {
                         <DropdownItem tag="a" href="/makeAccount">계좌개설</DropdownItem>
                         <DropdownItem tag="a" href="/deposit">입금</DropdownItem>
                         <DropdownItem tag="a" href="/withdraw">출금</DropdownItem>
-                        <DropdownItem tag="a" href="/accountInfoForm">계좌조회</DropdownItem>
+                        <DropdownItem tag="a" href="/accountInfo">계좌조회</DropdownItem>
                         <DropdownItem tag="a" href="/transfer">계좌이체</DropdownItem>
                         <DropdownItem tag="a" href="/allAccountInfo">전체계좌조회</DropdownItem>
                     </DropdownMenu>

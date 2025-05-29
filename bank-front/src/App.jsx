@@ -1,16 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AccountInfo } from './AccountInfo';
+import AllAccountInfo from './AllAccountInfo';
 import './App.css';
 import { Deposit } from './Deposit';
 import Header from './Header';
+import Join from './Join';
 import { Login } from './Login';
 import { MakeAccount } from './MakeAccount';
 import { Transfer } from './Transfer';
 import { Withdraw } from './Withdraw';
-import AccountInfoForm from './AccountInfoForm';
-import AllAccountInfo from './AllAccountInfo';
-import Join from './Join';
+import AccountInfo from './AccountInfo';
 function App() {
 
   return (
@@ -20,7 +19,6 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Login/>}/>
           <Route exact path="/join" element={<Join/>}/>
-          <Route exact path="/accountInfoForm" element={<AccountInfoForm/>}/>
           <Route exact path="/deposit" element={<Deposit/>}/>
           <Route exact path="/withdraw" element={<Withdraw/>}/>
           <Route exact path="/transfer" element={<Transfer/>}/>
