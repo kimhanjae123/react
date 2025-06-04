@@ -1,79 +1,89 @@
+import { useEffect, useState } from "react"
+import { url } from "./config";
+import './BoardList.css'
 import axios from 'axios';
-import { useEffect, useState } from "react";
-import { url } from "../../bank-front/src/config";
-import './BoardList.css';
-import { Link } from 'react-router-dom';
-export const BoardList = () => {
-    const [user, setUser] = useState({ id: '', name: '', nickname: '' })
+import { useSelector } from "react-redux";
+
+
+export default function BoardList() {
     const [boardList, setBoardList] = useState([]);
-    const [pageInfo, setPageInfo] = useState({ curPage: 1, startPage: 0, endPage: 0, allPage: 1 });
+    const [pageInfo, setPageInfo] = useState({curPage:1,allPage:1,startPage:1,endPage:1})
+    const user = useSelector(state=>state.persistedReducer.user);
+    const [search, setSearch] = useState({page:1,type:'title',word:''});
+    const [pageNums, setPageNums] = useState([]);
 
-    useEffect(() => {
-        axios.get(`${url}/list`)
-            .then(res => {
-                console.log(res.data);
-                setBoardList(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [])
+    const submit = (page) => {
+        setSearch({...search, page:page})
 
+        const param = {page:page,type:search.type,word:search.word}
+
+        axios.post(`${url}/list`,param)
+        .then(res=>{
+            console.log(res)
+            setBoardList(res.data.boardList)
+            var resPageInfo= res.data.pageInfo;
+            setPageInfo(resPageInfo)
+            var pages = [];
+            for(var i=resPageInfo.startPage; i<=resPageInfo.endPage;i++){
+                pages.push(i)
+            }
+            setPageNums([...pages])
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+
+
+    useEffect(()=>{
+        submit(1);
+    },[])
+
+
+    const edit = (e) => {
+        setSearch({...search, [e.target.name]:e.target.value});
+    }
     return (
         <>
             <h2>글 목록&nbsp;&nbsp;&nbsp;&nbsp;
-                {user.id && <a href="write">글쓰기</a>}
+                {user.id ? <a href="write">글쓰기</a> :''}
             </h2>
-            <form action="list" method="get" id="search">
-                <input type="hidden" name="page" value="1" id="page" />
-                <select name="type" id="type">
-                    <option value="title" selected="selected">제목</option>
+            <form onSubmit={(e)=>e.preventDefault()}>
+                <select name="type" id="type" onChange={edit} defaultValue={"title"}>
+                    <option value="title" >제목</option>
                     <option value="writer">작성자</option>
                     <option value="content">내용</option>
                 </select>
-                <input type="text" name="word" value="" />
-                <input type="submit" value="검색" />
+                <input type="text" name="word" onChange={edit}/>
+                <input type="submit" value="검색" onClick={()=>submit(1)}/>
             </form>
             <br />
             <table>
+                <tbody>
                 <tr id="tr_top">
                     <th>번호</th><th>제목</th><th>작성자</th><th>날짜</th><th>조회수</th>
                 </tr>
-                {boardList.map(board =>
-                (<tr key={board.num}>
-                    <td>{board.num}</td>
-                    <td> <Link to={`/detail/${board.num}`}>{board.title}</Link></td>
-                    <td>{board.name}</td>
-                    <td>{board.createDate}</td>
-                    <td>{board.viewcnt}</td>
-                </tr>)
-                )}
+                {
+                    boardList.map(board=><tr key={board.num}> 
+                        <td>{board.num}</td>
+                        <td><a href={`/detail/${board.num}`}>{board.title}</a></td>
+                        <td>{board.writer}</td>
+                        <td>{board.createdate}</td>
+                        <td>{board.viewcnt}</td>
+                    </tr>)
+                }
+                </tbody>
             </table>
             <br />
             <div id="emptyArea">
-                {pageInfo.curPage == 1 ? <>
-                    <a>&lt;</a>
-                </> :
-                    <button onclick="submit(${pageInfo.curPage-1})">&lt;</button>
-                }
-                {Array.from({ length: pageInfo.endPage - pageInfo.startPage + 1 }, (_, idx) => {
-                    const i = pageInfo.startPage + idx;
-                    return (
-                        <button
-                            key={i}
-                            className={i === pageInfo.curPage ? 'select' : ''}
-                            onClick={() => submit(i)}
-                        >
-                            {i}
-                        </button>
-                    );
-                })}
-                {pageInfo.curPage >= pageInfo.allPage ? <>
-                    <a>&gt;</a>
-                </> :
-                    <button onclick="submit(${pageInfo.curPage+1})">&gt;</button>
-                }
-            </div>
+                <button onClick={()=>submit(pageInfo.curPage-1)} disabled={pageInfo.curPage==1}>&lt;</button>
+
+                { pageNums.map(p=>
+                    <button  onClick={()=>submit(p)} 
+                        className={p==pageInfo.curPage?'select':''} key={p}>{p}</button>) }
+
+                <button onClick={()=>submit(pageInfo.curPage-1)} disabled={pageInfo.curPage>=pageInfo.allPage}>&gt;</button>
+            </div>           
         </>
     )
 }

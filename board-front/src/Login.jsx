@@ -1,36 +1,58 @@
+import { useState } from "react";
+import { url } from "./config";
 import './Login.css'
+import axios from 'axios';
+import {useDispatch} from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export default function Login() {
+    const [login, setLogin] = useState({id:'',password:''})
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const edit = (e) => {
+        setLogin({...login, [e.target.name]:e.target.value});
+    }
+    const submit = (e) => {
+        e.preventDefault();
+        axios.post(`${url}/login`, login)
+            .then(res=>{
+                console.log(res)
+                const user = res.data;
+                dispatch({type:"USER",payload:{ id:user.id,
+        name:user.name,
+        nickname:user.nickname,
+        email:user.email,
+        address:user.address,
+        detailAddress:user.detailAddress}});
+         navigate("/list")
+            })
+            .catch(err=> {
+                console.log(err)
+               
+            })
+    }
+    
     return (
         <>
-            <div class="center"><h3>로그인</h3></div>
-            <div class="container">
-                <form action="login" method="post">
-                    <table border="1">
+            <div className="center"><h3>로그인</h3></div>
+            <div className="container">
+                <form onSubmit={submit}>
+                    <table border="1" className="loginTable">
+                        <tbody>
                         <tr>
                             <th>아이디</th>
-                            <td><input type="text" name="id" value='' /></td>
+                            <td><input type="text" name="id" onChange={edit}/></td>
                         </tr>
                         <tr>
                             <th>비밀번호</th>
-                            <td><input type="text" name="password" value="" /></td>
+                            <td><input type="text" name="password" onChange={edit}/></td>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                {/* <%if(autologin) { %>
-                                    <input type="checkbox" value="true" name="autologin" checked="checked" />자동로그인
-                                <%} else { %>
-                                    <input type="checkbox" value="true" name="autologin" />자동로그인
-                                <%} %> */}
-                            </td>
+                            <td colSpan="2" className="center"><input type="submit" value="로그인" /></td>
                         </tr>
-                        <tr>
-                            <td colspan="2" class="center"><input type="submit" value="로그인" /></td>
-                        </tr>
+                        </tbody>
                     </table>
                 </form>
-                <br />
-
             </div>
         </>
     )
